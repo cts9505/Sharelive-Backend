@@ -1,0 +1,7 @@
+{
+  "name": "sharelive",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
