@@ -7,7 +7,7 @@ exports.startClient = startClient;
 const ws_1 = __importDefault(require("ws"));
 const http_1 = __importDefault(require("http"));
 function startClient(port) {
-    const ws = new ws_1.default("ws://localhost:8080/tunnel");
+    const ws = new ws_1.default("wss://tunnel.sharelive.site/tunnel");
     ws.on("message", (raw) => {
         const msg = JSON.parse(raw.toString());
         if (msg.type === "tunnel_created") {

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { tunnelManager } from "../tunnel/tunnelManager";
-import { v4 as uuid } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export async function publicProxy(fastify: FastifyInstance) {
 
@@ -15,7 +15,7 @@ export async function publicProxy(fastify: FastifyInstance) {
       return reply.status(404).send("Tunnel not found");
     }
 
-    const requestId = uuid();
+    const requestId = uuidv4();
 
     tunnelManager.addPending(requestId, reply);
 
