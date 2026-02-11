@@ -19,11 +19,26 @@ class TunnelManager {
 
   addPending(requestId: string, reply: any) {
     this.pending.set(requestId, reply);
+
+    // ✅ PRO ADDITION: Timeout cleanup (e.g., 30 seconds)
+    // If the local CLI doesn't respond in time, close the connection cleanly.
+    setTimeout(() => {
+      if (this.pending.has(requestId)) {
+        const pendingReply = this.pending.get(requestId);
+        
+        // Check if Fastify hasn't already sent the response
+        if (!pendingReply.sent) {
+          pendingReply.code(504).send("Gateway Timeout: Local tunnel did not respond.");
+        }
+        
+        this.pending.delete(requestId);
+      }
+    }, 30000); // 30 seconds
   }
 
   resolvePending(requestId: string, data: any) {
     const reply = this.pending.get(requestId);
-    if (!reply) return;
+    if (!reply) return; // Request timed out or was already resolved
 
     const headers = { ...(data.headers || {}) };
 
